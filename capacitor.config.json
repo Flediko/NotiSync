@@ -1,0 +1,8 @@
+{
+  "appId": "com.notisync.app",
+  "appName": "NotiSync",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

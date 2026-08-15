@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotiSync Dashboard</title>
+    <!-- Modern Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="static/manifest.json">
+    <meta name="theme-color" content="#00f0ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="static/icon.png">
+    <!-- PWA Camera Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" defer></script>
+    <!-- Main Client Script -->
+    <script src="static/app.js" defer></script>
+</head>
+<body>
+    <!-- Setup / Pairing View -->
+    <div id="setup-view" class="setup-view" style="display: none;">
+        <div class="setup-card">
+            <span class="setup-logo">🔔</span>
+            <h2>NotiSync</h2>
+            <p class="setup-tagline">Pair with Windows Laptop</p>
+            
+            <div class="setup-instructions">
+                <ol>
+                    <li>Launch NotiSync on your laptop.</li>
+                    <li>Scan the QR code printed in the terminal or on the web dashboard.</li>
+                </ol>
+            </div>
+            
+            <button id="btn-setup-scan" class="setup-btn-primary">
+                <span>📷</span> Scan QR Code
+            </button>
+            
+            <div class="setup-divider">
+                <span>OR ENTER MANUALLY</span>
+            </div>
+            
+            <div class="setup-manual-input">
+                <input type="text" id="setup-url-input" placeholder="e.g. http://192.168.1.5:8000">
+                <button id="btn-setup-connect" class="setup-btn-secondary">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-container">
+        <!-- Dashboard Header -->
+        <header class="dashboard-header">
+            <div class="logo-area">
+                <span class="logo-icon">🔔</span>
+                <div class="logo-text">
+                    <h1>NotiSync</h1>
+                    <p>Windows Notification Sync</p>
+                </div>
+            </div>
+            
+            <div class="header-status-group" style="display: flex; align-items: center; gap: 8px;">
+                <div id="status-badge" class="status-badge state-disconnected">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Connecting...</span>
+                </div>
+                <button id="btn-disconnect" class="btn-disconnect-header" title="Disconnect / Change Server" style="display: none; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); transition: all 0.2s ease;">🔌</button>
+            </div>
+        </header>
+
+        <!-- Controls Area -->
+        <section class="controls-panel">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Search notifications by app or content...">
+            </div>
+            
+            <div class="action-switches">
+                <label class="switch-container">
+                    <input type="checkbox" id="sound-toggle" checked>
+                    <span class="switch-label">Chime Alert</span>
+                    <span class="switch-visual"></span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Active Notifications Container -->
+        <main class="notifications-section">
+            <div class="section-title">
+                <h2>Active Notifications (<span id="count-badge">0</span>)</h2>
+            </div>
+            
+            <!-- Empty state illustration -->
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon">✓</div>
+                <h3>All Clear!</h3>
+                <p>No active notifications from your laptop right now.</p>
+            </div>
+
+            <!-- List of notification cards -->
+            <div id="notifications-list" class="notifications-list"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Connected securely to your laptop</p>
+        </footer>
+    </div>
+
+    <!-- Modal for showing notification details -->
+    <div id="detail-modal" class="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modal-app-badge" class="app-badge">App Name</span>
+                <span id="modal-time" class="card-time">Time</span>
+                <button id="modal-close" class="modal-close" title="Close modal">&times;</button>
+            </div>
+            <h2 id="modal-title" class="modal-title">Title</h2>
+            <div id="modal-body" class="modal-body">Body</div>
+            <div class="modal-footer">
+                <button id="modal-btn-copy" class="modal-btn secondary">Copy Content</button>
+                <button id="modal-btn-dismiss" class="modal-btn danger">Dismiss Notification</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Scan Button -->
+    <button id="btn-scan-qr" class="btn-scan-qr" title="Scan connection QR code">📷</button>
+
+    <!-- PWA QR Code Scanner Modal -->
+    <div id="scanner-modal" class="detail-modal">
+        <div class="modal-content scanner-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Scan Connection QR</h2>
+                <button id="scanner-close" class="modal-close" title="Close scanner">&times;</button>
+            </div>
+            <div class="scanner-body">
+                <div id="reader" class="scanner-reader"></div>
+                <p class="scanner-tip">Point your camera at the connection QR code displayed on your laptop terminal.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NotiSync</string>
+    <string name="title_activity_main">NotiSync</string>
+    <string name="package_name">com.notisync.app</string>
+    <string name="custom_url_scheme">com.notisync.app</string>
+</resources>

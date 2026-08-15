@@ -1,0 +1,18 @@
+{
+  "name": "NotiSync Dashboard",
+  "short_name": "NotiSync",
+  "description": "Windows Notification Sync Dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d0b1a",
+  "theme_color": "#7c4dff",
+  "icons": [
+    {
+      "src": "/static/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

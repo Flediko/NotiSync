@@ -1,0 +1,20 @@
+{
+  "name": "notisync-mobile",
+  "version": "1.0.0",
+  "description": "Windows to Mobile notification sync client packaged using Capacitor",
+  "main": "index.js",
+  "scripts": {
+    "build": "python build_capacitor.py",
+    "cap-init": "npx cap init NotiSync com.notisync.app --web-dir=www",
+    "cap-sync": "npx cap sync",
+    "android-open": "npx cap open android"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  }
+}

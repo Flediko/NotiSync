@@ -1,0 +1,31 @@
+# Python virtual environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Node / Web distribution
+node_modules/
+www/
+
+# IDE configurations
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Android native build files and local properties
+.gradle/
+build/
+android/.gradle/
+android/app/build/
+android/local.properties
+android/captures/
+*.apk
+*.aar
+
+# Temporary and local text files
+Next to add.txt
