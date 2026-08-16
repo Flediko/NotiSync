@@ -90,9 +90,9 @@ To compile the APK with the persistent background sync plugin:
 - [x] **In-App Camera QR Scanner:** Tap the floating camera button to scan laptop screen QR codes and switch sessions instantly.
 - [x] **Audio Chimes:** Toggleable synth audio chime alert generated natively using the Web Audio API on new arrivals.
 - [x] **Capacitor Android Scaffold:** Native packaging and plugin bindings to launch the background sync client.
+- [x] **Android Drawer Posting:** Linking the Java background websocket channel to generate native drawer-notification items on Android.
 
 ### 🟡 In Progress / Polish
-- [ ] **Android Drawer Posting:** Linking the Java background websocket channel to generate native drawer-notification items on Android.
 - [ ] **Notification History Database:** Persistent local storage (e.g. SQLite) on the laptop to view history/logs of past notifications even after they are dismissed.
 - [ ] **App Filters:** Create custom categories (e.g., "Personal", "Work", "System") based on the sending application.
 
