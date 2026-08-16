@@ -27,7 +27,9 @@ public class NotificationForegroundService extends Service {
     private static final String SERVICE_CHANNEL_ID = "notisync_service";
     private static final String ALERTS_CHANNEL_ID = "notisync_alerts";
     private static final int SERVICE_NOTIFICATION_ID = 1;
+    private static final int ANTIGRAVITY_NOTIFICATION_ID = 9999;
 
+    private final java.util.Set<Integer> activeAntigravityIds = new java.util.HashSet<>();
     private String serverUrl = "";
     private OkHttpClient okHttpClient;
     private WebSocket webSocket;
@@ -194,11 +196,29 @@ public class NotificationForegroundService extends Service {
             notificationManager.createNotificationChannel(channel);
         }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        boolean isAntigravity = (appName != null && appName.toLowerCase().contains("antigravity"));
+        int targetId = id;
+        Intent intent = null;
+
+        if (isAntigravity) {
+            synchronized (activeAntigravityIds) {
+                activeAntigravityIds.add(id);
+            }
+            targetId = ANTIGRAVITY_NOTIFICATION_ID;
+            intent = getPackageManager().getLaunchIntentForPackage("com.google.chromeremotedesktop");
+            if (intent != null) {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            }
+        }
+
+        if (intent == null) {
+            intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                id,
+                targetId,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -212,13 +232,38 @@ public class NotificationForegroundService extends Service {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        notificationManager.notify(id, builder.build());
+        if (isAntigravity) {
+            Intent crdIntent = getPackageManager().getLaunchIntentForPackage("com.google.chromeremotedesktop");
+            if (crdIntent != null) {
+                crdIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent crdPendingIntent = PendingIntent.getActivity(
+                        this,
+                        targetId + 1,
+                        crdIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                );
+                builder.addAction(0, "Open Remote Desktop", crdPendingIntent);
+            }
+        }
+
+        notificationManager.notify(targetId, builder.build());
     }
 
     private void cancelNativeNotification(int id) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.cancel(id);
+            boolean isAntigravity = false;
+            synchronized (activeAntigravityIds) {
+                if (activeAntigravityIds.contains(id)) {
+                    isAntigravity = true;
+                    activeAntigravityIds.remove(id);
+                }
+            }
+            if (isAntigravity) {
+                notificationManager.cancel(ANTIGRAVITY_NOTIFICATION_ID);
+            } else {
+                notificationManager.cancel(id);
+            }
         }
     }
 
